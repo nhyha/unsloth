@@ -1195,16 +1195,7 @@ class FastLlamaModel:
         f"\\        /    Total batch size = {total_train_batch_size:,} | Total steps = {max_steps:,}\\n"\\
         f' "-____-"     Number of trainable parameters = {get_model_param_count(model, trainable_only=True):,}'
         logger.warning(debug_info)
-        import subprocess, re, gc
-        output = subprocess.check_output(
-            'nvidia-smi --query-gpu=memory.used --format=csv', shell = True)
-        output = re.findall(rb'([\\d]{1,})[\\s]{1,}M', output)
-        output = sum(int(x.decode('utf-8'))/1024 > 4 for x in output)
-        if output > 1: raise RuntimeError(
-            'Unsloth currently does not work on multi GPU setups - sadly we are a 2 brother team so '\\
-            'enabling it will require much more work, so we have to prioritize. Please understand!\\n'\\
-            'We do have a separate beta version, which you can contact us about!\\n'\\
-            'Thank you for your understanding and we appreciate it immensely!')
+        
         for _ in range(3):
             gc.collect()
             torch.cuda.empty_cache()"""
