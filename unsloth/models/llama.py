@@ -1435,8 +1435,7 @@ class FastLlamaModel:
             raise RuntimeError('Unsloth currently does not support multi GPU setups - but we are working on it!')
         pass
 
-        if ((post_check - pre_check) >= 1).sum() > 1:
-            raise RuntimeError('Unsloth currently does not support multi GPU setups - but we are working on it!')
+
 
         import transformers.trainer
         items_in_trainer = dir(transformers.trainer)
@@ -1470,8 +1469,7 @@ class FastLlamaModel:
         except:
             if not torch.cuda.is_available():
                 raise RuntimeError('Unsloth: We do not support AMD / Intel machines yet - it is a work in progress!')
-        if ((a - PRE_CHECK) >= 1).sum() > 1:
-            raise RuntimeError('Unsloth currently does not support multi GPU setups - but we are working on it!')
+
         for _ in range(3):
             gc.collect()
             torch.cuda.empty_cache()"""
