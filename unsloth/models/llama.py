@@ -1460,7 +1460,6 @@ class FastLlamaModel:
         f"\\        /    Total batch size = {total_train_batch_size:,} | Total steps = {max_steps:,}\\n"\\
         f' "-____-"     Number of trainable parameters = {get_model_param_count(model, trainable_only=True):,}'
         logger.warning(debug_info)
-<<<<<<< HEAD
         import subprocess, re, gc, numpy as np
         a = np.array([0,])
         try:
@@ -1470,8 +1469,6 @@ class FastLlamaModel:
         except:
             if not torch.cuda.is_available():
                 raise RuntimeError('Unsloth: We do not support AMD / Intel machines yet - it is a work in progress!')
-=======
->>>>>>> 66b0af2c6a94129629ca5c506366ba0f1fd34219
 
         for _ in range(3):
             gc.collect()
