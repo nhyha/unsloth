@@ -911,23 +911,6 @@ def patch_sft_trainer_tokenizer():
         function = "\n".join(x[where:] for x in function)
 
         check_text = \
-        "\n"\
-        "import subprocess, re, gc, numpy as np\n"\
-        "a = np.array([0,])\n"\
-        "try:\n"\
-        "    a = subprocess.check_output('nvidia-smi --query-gpu=memory.used --format=csv', shell = True)\n"\
-        "    a = re.findall(rb'([\\d]{1,})[\\s]{1,}M', a)\n"\
-        "    a = np.array([int(x.decode('utf-8'))/1024 for x in a])\n"\
-        "except:\n"\
-        "    if not torch.cuda.is_available():\n"\
-        "        raise RuntimeError('Unsloth: We do not support AMD / Intel machines yet - it is a work in progress!')\n"\
-        "if ((a - PRE_CHECK) >= 1).sum() > 1:\n"\
-        "    raise RuntimeError('Unsloth currently does not support multi GPU setups - but we are working on it!')\n"\
-        "for _ in range(3):\n"\
-        "    gc.collect()\n"\
-        "    torch.cuda.empty_cache()\n"\
-        "pass\n"\
-        "\n"\
         "fix_untrained_tokens(self.model, self.tokenizer, self.train_dataset, IGNORED_TOKENIZER_NAMES, eps = 1e-16)\n\n"\
         "fix_zero_training_loss(self.model, self.tokenizer, self.train_dataset)\n\n"
 
