@@ -911,6 +911,12 @@ def patch_sft_trainer_tokenizer():
         function = "\n".join(x[where:] for x in function)
 
         check_text = \
+        "\n"\
+        "for _ in range(3):\n"\
+        "    gc.collect()\n"\
+        "    torch.cuda.empty_cache()\n"\
+        "pass\n"\
+        "\n"\
         "fix_untrained_tokens(self.model, self.tokenizer, self.train_dataset, IGNORED_TOKENIZER_NAMES, eps = 1e-16)\n\n"\
         "fix_zero_training_loss(self.model, self.tokenizer, self.train_dataset)\n\n"
 
