@@ -1638,7 +1638,6 @@ class FastLlamaModel:
         for item in items_in_trainer:
             # TODO: Support Deepspeed
             if item.startswith(("deepspeed", "xm", "met", "smp")): continue
-            if item in inner_training_loop: good_items.append(item)
         pass
         exec("from transformers.trainer import (" + ", ".join(x for x in good_items) + ")", globals())
 
