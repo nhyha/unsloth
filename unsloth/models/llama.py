@@ -1631,6 +1631,16 @@ class FastLlamaModel:
 
         # Patch Trainer
         from transformers.trainer import Trainer
+        try:
+            if Trainer._inner_training_loop.__name__ != "_fast_inner_training_loop":
+                inner_training_loop = inspect.getsource(Trainer._inner_training_loop)
+                Trainer._original_training_loop = inner_training_loop
+            else:
+                inner_training_loop = Trainer._original_training_loop
+        except:
+            raise RuntimeError('Unsloth currently does not support multi GPU setups - but we are working on it!')
+        pass
+
 
         import transformers.trainer
         items_in_trainer = dir(transformers.trainer)
@@ -1638,6 +1648,7 @@ class FastLlamaModel:
         for item in items_in_trainer:
             # TODO: Support Deepspeed
             if item.startswith(("deepspeed", "xm", "met", "smp")): continue
+            if item in inner_training_loop: good_items.append(item)
         pass
         exec("from transformers.trainer import (" + ", ".join(x for x in good_items) + ")", globals())
 
@@ -1663,6 +1674,8 @@ class FastLlamaModel:
         except:
             if not torch.cuda.is_available():
                 raise RuntimeError('Unsloth: We do not support AMD / Intel machines yet - it is a work in progress!')
+        if ((a - PRE_CHECK) >= 1).sum() > 1:
+            raise RuntimeError('Unsloth currently does not support multi GPU setups - but we are working on it!')
         for _ in range(3):
             gc.collect()
             torch.cuda.empty_cache()"""
@@ -2549,4 +2562,3 @@ class FastLlamaModel:
         return model
     pass
 pass
-
